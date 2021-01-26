@@ -1,26 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
+import { connect } from 'react-redux';
 import './App.css';
+import { counterDecrementedActions, counterIncrementedActions } from './redux';
+import { getCountSelector } from './redux/selector';
 
-function App() {
+const CLASS_NAME = 'App';
+
+function App({ count, onIncrement, onDecrement }: any) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className={CLASS_NAME}>
+      <header className={`${CLASS_NAME}-header`}>
+        {count}
+        <button onClick={() => onIncrement()} type="button">
+          Increment
+        </button>
+        <button onClick={() => onDecrement()} type="button">
+          Decrement
+        </button>
       </header>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state: any) => ({
+  count: getCountSelector(state)
+});
+
+const mapDispatchToProps = {
+  onIncrement: counterIncrementedActions,
+  onDecrement: counterDecrementedActions
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
